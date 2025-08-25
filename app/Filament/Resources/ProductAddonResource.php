@@ -2,8 +2,8 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\ProductOptionResource\Pages;
-use App\Models\ProductOption;
+use App\Filament\Resources\ProductAddonResource\Pages;
+use App\Models\ProductAddon;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -19,13 +19,12 @@ use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Illuminate\Support\Str;
 
-class ProductOptionResource extends Resource
+class ProductAddonResource extends Resource
 {
-    protected static ?string $model = ProductOption::class;
+    protected static ?string $model = ProductAddon::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-adjustments-horizontal';
+    protected static ?string $navigationIcon = 'heroicon-o-plus-circle';
 
     public static function form(Form $form): Form
     {
@@ -36,12 +35,9 @@ class ProductOptionResource extends Resource
                     ->required()
                     ->searchable()
                     ->label('Produk'),
-                TextInput::make('type')
-                    ->required()
-                    ->label('Tipe Opsi (e.g., Ukuran, Pinggiran)'),
                 TextInput::make('name')
                     ->required()
-                    ->label('Nama Opsi (e.g., Medium)'),
+                    ->label('Nama Add-on (e.g., Ekstra Keju)'),
                 TextInput::make('price_increase')
                     ->required()
                     ->mask(RawJs::make('$money($input)'))
@@ -63,28 +59,16 @@ class ProductOptionResource extends Resource
                     ->sortable()
                     ->searchable()
                     ->label('Produk'),
-                TextColumn::make('type')
-                    ->sortable()
-                    ->searchable()
-                    ->label('Tipe Opsi'),
                 TextColumn::make('name')
                     ->sortable()
                     ->searchable()
-                    ->label('Nama Opsi'),
+                    ->label('Nama Add-on'),
                 TextColumn::make('price_increase')
                     ->money('IDR')
                     ->sortable()
                     ->label('Harga Tambahan'),
                 ToggleColumn::make('is_active')
                     ->label('Tersedia'),
-                TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //
@@ -110,17 +94,9 @@ class ProductOptionResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListProductOptions::route('/'),
-            'create' => Pages\CreateProductOption::route('/create'),
-            'edit' => Pages\EditProductOption::route('/{record}/edit'),
+            'index' => Pages\ListProductAddons::route('/'),
+            'create' => Pages\CreateProductAddon::route('/create'),
+            'edit' => Pages\EditProductAddon::route('/{record}/edit'),
         ];
-    }
-    
-    public static function getEloquentQuery(): Builder
-    {
-        return parent::getEloquentQuery()
-            ->withoutGlobalScopes([
-                SoftDeletingScope::class,
-            ]);
     }
 }
