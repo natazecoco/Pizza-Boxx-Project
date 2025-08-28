@@ -2,12 +2,14 @@
 
 namespace App\Filament\Resources\ProductResource\RelationManagers;
 
-use Filament\Forms\Components\Select;
+use App\Models\Size;
+use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
-use Filament\Tables\Actions\AttachAction;
+use Filament\Tables\Actions\Action;
+use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Actions\DetachAction;
 use Filament\Tables\Actions\DetachBulkAction;
 use Filament\Tables\Columns\TextColumn;
@@ -24,6 +26,7 @@ class SizesRelationManager extends RelationManager
     {
         return $form
             ->schema([
+                // Form default untuk edit pivot
                 TextInput::make('price_increase')
                     ->required()
                     ->mask(RawJs::make('$money($input)'))
@@ -47,12 +50,23 @@ class SizesRelationManager extends RelationManager
                     ->label('Harga Tambahan'),
             ])
             ->headerActions([
-                AttachAction::make()
-                    ->form(fn (AttachAction $action): array => [
-                        $action->getRecordSelect()
-                            ->preload()
-                            ->label('Ukuran')
-                            ->required(),
+                Action::make('attachSizes')
+                    ->label('Tambah Ukuran')
+                    ->form([
+                        CheckboxList::make('sizes')
+                            ->label('Pilih Ukuran')
+                            ->options(function (RelationManager $livewire) {
+                                $attached = $livewire->ownerRecord->sizes()->pluck('sizes.id')->toArray();
+
+                                return Size::query()
+                                    ->whereNotIn('id', $attached)
+                                    ->pluck('name', 'id');
+                            })
+                            ->columns(2)
+                            ->searchable()
+                            ->bulkToggleable()
+                            ->required()
+                            ->helperText('Pilih ukuran yang ingin ditambahkan'),
 
                         TextInput::make('price_increase')
                             ->required()
@@ -61,7 +75,12 @@ class SizesRelationManager extends RelationManager
                             ->numeric()
                             ->prefix('Rp')
                             ->label('Harga Tambahan'),
-                    ]),
+                    ])
+                   ->action(function (array $data, RelationManager $livewire) {
+                       $livewire->ownerRecord->sizes()->attach($data['sizes'], [
+                           'price_increase' => $data['price_increase'],
+                       ]);
+                   })
             ])
             ->actions([
                 Tables\Actions\EditAction::make()
@@ -84,6 +103,35 @@ class SizesRelationManager extends RelationManager
             ])
             ->bulkActions([
                 DetachBulkAction::make(),
+
+                BulkAction::make('editBulk')
+                    ->label('Edit Beberapa')
+                    ->icon('heroicon-o-pencil-square')
+                    ->form([
+                        TextInput::make('price_increase')
+                            ->required()
+                            ->mask(RawJs::make('$money($input)'))
+                            ->stripCharacters(',')
+                            ->numeric()
+                            ->prefix('Rp')
+                            ->label('Harga Tambahan'),
+                    ])
+                    ->action(function (array $data, $records, RelationManager $livewire) {
+                        foreach ($records as $record) {
+                            $livewire->ownerRecord
+                                ->sizes()
+                                ->updateExistingPivot($record->id, [
+                                    'price_increase' => $data['price_increase'],
+                                ]);
+                        }
+
+                        // reset pilihan checkbox setelah selesai
+                        $livewire->dispatch('deselectAllTableRecords');
+                    })
+
+                    
+                    ->requiresConfirmation()
+                    ->modalWidth('lg')
             ]);
     }
 }

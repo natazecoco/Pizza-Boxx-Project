@@ -19,7 +19,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class SauceResource extends Resource
 {
     protected static ?string $model = Sauce::class;
-    protected static ?string $navigationGroup = 'Manajemen Kustomisasi & Harga';
+    protected static ?string $navigationGroup = 'Manajemen Produk';
     protected static ?string $navigationIcon = 'heroicon-o-funnel';
 
     public static function form(Form $form): Form

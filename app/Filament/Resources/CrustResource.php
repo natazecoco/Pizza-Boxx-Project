@@ -20,7 +20,7 @@ class CrustResource extends Resource
 {
     protected static ?string $model = Crust::class;
 
-    protected static ?string $navigationGroup = 'Manajemen Kustomisasi & Harga';
+    protected static ?string $navigationGroup = 'Manajemen Produk';
 
     protected static ?string $navigationIcon = 'heroicon-o-circle-stack';
 

@@ -49,7 +49,8 @@ class CrustsRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
-                AttachAction::make(),
+                AttachAction::make()
+                ->multiple(), // Bisa pilih banyak topping sekaligus
             ])
             ->actions([
                 DetachAction::make(),

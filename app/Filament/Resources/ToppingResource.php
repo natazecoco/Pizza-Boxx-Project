@@ -21,7 +21,7 @@ class ToppingResource extends Resource
 {
     protected static ?string $model = Topping::class;
 
-    protected static ?string $navigationGroup = 'Manajemen Kustomisasi & Harga';
+    protected static ?string $navigationGroup = 'Manajemen Produk';
 
     protected static ?string $navigationIcon = 'heroicon-o-hand-raised';
 

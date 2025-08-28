@@ -23,7 +23,7 @@ use App\Filament\Resources\SizeResource\RelationManagers\SaucesRelationManager;
 class SizeResource extends Resource
 {
     protected static ?string $model = Size::class;
-    protected static ?string $navigationGroup = 'Manajemen Kustomisasi & Harga';
+    protected static ?string $navigationGroup = 'Manajemen Produk';
     protected static ?string $navigationIcon = 'heroicon-o-adjustments-horizontal';
 
     public static function form(Form $form): Form

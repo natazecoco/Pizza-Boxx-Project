@@ -17,7 +17,7 @@ use Filament\Tables\Table;
 class DoughResource extends Resource
 {
     protected static ?string $model = Dough::class;
-    protected static ?string $navigationGroup = 'Manajemen Kustomisasi & Harga';
+    protected static ?string $navigationGroup = 'Manajemen Produk';
     protected static ?string $navigationIcon = 'heroicon-o-cube';
 
     public static function form(Form $form): Form

@@ -45,11 +45,13 @@ class Product extends Model
 
     public function sauces(): BelongsToMany
     {
-        return $this->belongsToMany(Sauce::class, 'product_sauce');
+        return $this->belongsToMany(Sauce::class, 'product_sauce')
+        ->withPivot('is_default');
     }
 
     public function doughs(): BelongsToMany
     {
-        return $this->belongsToMany(Dough::class, 'product_dough');
+        return $this->belongsToMany(Dough::class, 'product_dough')
+        ->withPivot('is_default');
     }
 }

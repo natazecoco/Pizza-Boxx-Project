@@ -6,8 +6,8 @@ use App\Filament\Resources\ProductResource\Pages;
 use App\Filament\Resources\ProductResource\RelationManagers\ToppingsRelationManager;
 use App\Filament\Resources\ProductResource\RelationManagers\SizesRelationManager;
 // use App\Filament\Resources\ProductResource\RelationManagers\CrustsRelationManager;
-// use App\Filament\Resources\ProductResource\RelationManagers\SaucesRelationManager;
-// use App\Filament\Resources\ProductResource\RelationManagers\DoughsRelationManager;
+use App\Filament\Resources\ProductResource\RelationManagers\SaucesRelationManager;
+use App\Filament\Resources\ProductResource\RelationManagers\DoughsRelationManager;
 use App\Models\Product;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\FileUpload;
@@ -77,7 +77,7 @@ class ProductResource extends Resource
                         ->label('Gambar Produk'),
                     Toggle::make('is_active')
                         ->required()
-                        ->default(true)
+                        ->default(false)
                         ->label('Tersedia'),
                 ])->columns(2),
             ]);
@@ -127,8 +127,8 @@ class ProductResource extends Resource
             ToppingsRelationManager::class,
             SizesRelationManager::class,
             // CrustsRelationManager::class,
-            // SaucesRelationManager::class,
-            // DoughsRelationManager::class,
+            SaucesRelationManager::class,
+            DoughsRelationManager::class,
         ];
     }
 
