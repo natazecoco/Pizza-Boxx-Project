@@ -8,6 +8,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Filament\Support\RawJs;
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\DeleteBulkAction;
@@ -20,7 +21,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class DeliveryResource extends Resource
 {
     protected static ?string $model = Delivery::class;
-
+    protected static ?string $navigationGroup = 'Manajemen Bisnis';
     protected static ?string $navigationIcon = 'heroicon-o-truck';
     protected static ?string $label = 'Deliveries';
 
@@ -43,8 +44,12 @@ class DeliveryResource extends Resource
                     ->required()
                     ->label('Status Pengiriman'),
                 TextInput::make('delivery_fee')
-                    ->prefix('Rp')
+                ->mask(
+                    RawJs::make('$money($input)')
+                    )
+                    ->stripCharacters(',')
                     ->numeric()
+                    ->prefix('Rp')
                     ->label('Biaya Pengiriman'),
                 TextInput::make('delivery_address')
                     ->label('Alamat Pengiriman'),

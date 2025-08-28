@@ -23,8 +23,9 @@ use Illuminate\Support\Str;
 class LocationResource extends Resource
 {
     protected static ?string $model = Location::class;
-
+    protected static ?string $navigationGroup = 'Manajemen Bisnis';
     protected static ?string $navigationIcon = 'heroicon-o-building-storefront';
+    protected static ?string $label = 'Branch';
 
     public static function form(Form $form): Form
     {

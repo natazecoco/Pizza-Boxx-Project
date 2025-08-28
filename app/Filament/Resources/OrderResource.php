@@ -10,6 +10,7 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Filament\Support\RawJs;
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\DeleteBulkAction;
@@ -22,7 +23,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class OrderResource extends Resource
 {
     protected static ?string $model = Order::class;
-
+    protected static ?string $navigationGroup = 'Manajemen Bisnis';
     protected static ?string $navigationIcon = 'heroicon-o-shopping-bag';
     protected static ?string $label = 'Orders';
 
@@ -59,6 +60,8 @@ class OrderResource extends Resource
                     ->readOnly()
                     ->label('Subtotal'),
                 TextInput::make('discount')
+                    ->mask(RawJs::make('$money($input)'))
+                    ->stripCharacters(',')
                     ->prefix('Rp')
                     ->numeric()
                     ->readOnly()

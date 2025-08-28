@@ -25,7 +25,7 @@ use Filament\Support\RawJs;
 class PromoResource extends Resource
 {
     protected static ?string $model = Promo::class;
-
+    protected static ?string $navigationGroup = 'Manajemen Bisnis';
     protected static ?string $navigationIcon = 'heroicon-o-currency-dollar';
 
     public static function form(Form $form): Form

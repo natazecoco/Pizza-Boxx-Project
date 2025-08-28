@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Widgets\OrderStats;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -16,6 +17,7 @@ use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
+use Illuminate\Support\HtmlString;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 class AdminPanelProvider extends PanelProvider
@@ -27,9 +29,19 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->favicon(asset('images/pizza-boxx-logo.png'))
+            ->brandName(fn () => new HtmlString(
+                '<div class="flex items-center gap-2">
+                    <img src="' . asset('images/pizza-boxx-logo.png') . '" alt="Pizza Boxx" class="h-10" />
+                    <span class="font-bold text-lg">Pizza Boxx</span>
+                </div>'
+            ))
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => Color::hex('#D32F2F'), // merah khas pizza box
+                'secondary' => Color::hex('#FFC107'), // kuning keju
+                'gray' => Color::Slate,
             ])
+            ->sidebarCollapsibleOnDesktop() // sidebar bisa collapse
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
@@ -39,6 +51,7 @@ class AdminPanelProvider extends PanelProvider
             ->widgets([
                 Widgets\AccountWidget::class,
                 Widgets\FilamentInfoWidget::class,
+                OrderStats::class,
             ])
             ->middleware([
                 EncryptCookies::class,

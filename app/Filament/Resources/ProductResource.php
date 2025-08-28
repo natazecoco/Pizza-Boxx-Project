@@ -3,6 +3,11 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\ProductResource\Pages;
+use App\Filament\Resources\ProductResource\RelationManagers\ToppingsRelationManager;
+use App\Filament\Resources\ProductResource\RelationManagers\SizesRelationManager;
+// use App\Filament\Resources\ProductResource\RelationManagers\CrustsRelationManager;
+// use App\Filament\Resources\ProductResource\RelationManagers\SaucesRelationManager;
+// use App\Filament\Resources\ProductResource\RelationManagers\DoughsRelationManager;
 use App\Models\Product;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\FileUpload;
@@ -24,11 +29,13 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Str;
-use Filament\Support\RawJs; // Tambahkan ini
+use Filament\Support\RawJs;
 
 class ProductResource extends Resource
 {
     protected static ?string $model = Product::class;
+
+    protected static ?string $navigationGroup = 'Manajemen Produk';
 
     protected static ?string $navigationIcon = 'heroicon-o-archive-box';
 
@@ -39,6 +46,7 @@ class ProductResource extends Resource
                 Card::make([
                     Select::make('category_id')
                         ->relationship('category', 'name')
+                        ->preload()
                         ->required()
                         ->label('Kategori'),
                     TextInput::make('name')
@@ -116,7 +124,11 @@ class ProductResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            ToppingsRelationManager::class,
+            SizesRelationManager::class,
+            // CrustsRelationManager::class,
+            // SaucesRelationManager::class,
+            // DoughsRelationManager::class,
         ];
     }
 
